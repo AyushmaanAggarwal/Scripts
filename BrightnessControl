@@ -1,0 +1,25 @@
+#!/bin/bash
+
+Max_Brightness=$(cat /sys/class/backlight/intel_backlight/max_brightness)
+CHOICE=$(echo -e  "1\n2\n3\n4\n5\n6\n7\n8\n9\n10" | ./Scripts/dmenu_colorized -p "Choose Brightness Level")
+Max_Choice=10
+Desired_Brightness=$(($Max_Brightness*$CHOICE/$Max_Choice))
+
+
+echo $CHOICE
+
+if [ $Desired_Brightness -eq $(cat /sys/class/backlight/intel_backlight/brightness) ]
+then
+	echo | ./Scripts/dmenu_colorized -p "	Already set to ideal value!	" 
+else 
+	if [ $Desired_Brightness -gt $Max_Brightness ]
+	then
+		echo | ./Scripts/dmenu_colorized -p "	More Than Maximum Allowed!	" 
+		echo $Desired_Brightness
+		echo $Max_Brightness
+	else 
+		echo $Desired_Brightness | sudo  tee /sys/class/backlight/intel_backlight/brightness | ./Scripts/dmenu_colorized
+	fi
+fi
+echo "Current Brightness:"
+echo $(cat /sys/class/backlight/intel_backlight/brightness)

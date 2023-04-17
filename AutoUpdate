@@ -1,0 +1,63 @@
+#!/bin/bash
+output=""
+reprint () {
+	 clear
+	 figlet Welcome Ayushmaan
+	 echo -e "$output"
+}
+
+reprint
+
+#Wait for Internet
+echo "Waiting for wifi"
+until ping -c 1 archlinux.org | grep "ttl="; do sleep 1; done
+echo "Connected to Internet"; echo
+
+# Set Time
+if [ $(timedatectl show | grep NTPSync) != $(echo -e NTPSynchronized=yes) ]
+then	
+	echo "Sync Time"
+	sudo timedatectl set-ntp true
+	output="Synced Time\n\n"
+	echo; echo; sleep 1
+fi
+
+# reprint
+
+# This script updates all pacman packages(no flatpak or snap packages on computer)
+echo "Updating Packages: " 
+sudo pacman -Sy | tee /var/log/scripts/AutoUpdate 
+
+output+="Pacman Updated: $(pacman -Qu) \n"
+sudo pacman -Syu 
+#sudo snap refresh
+# reprint
+sudo flatpak update 
+sudo npm update 
+sudo mamba update conda 
+yay -Syuqaw --ignore miniconda3 --answerclean All --answerdiff None --answeredit None 
+
+#echo; figlet "spotify-tui"
+#cd /home/ayushmaan/Applications/spotify-tui
+#cargo install spotify-tui
+
+echo; echo "dwm status"
+cd /home/ayushmaan/dwm
+git status -sb
+
+echo; echo "st status"
+cd /home/ayushmaan/st
+git status -sb
+
+echo; echo "dmenu status"
+cd /home/ayushmaan/dmenu
+git status -sb
+
+echo; echo "dwmstatus status"
+cd /home/ayushmaan/dwmstatus
+git status -sb
+
+figlet "Finished Startup"
+sleep 6
+
+kill -9 $PPID
