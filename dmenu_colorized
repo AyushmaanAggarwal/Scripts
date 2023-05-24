@@ -1,0 +1,3 @@
+#!/bin/dash
+
+dmenu -m 0 -fn "Source Code Pro:size=20" -nb "#000000" -nf "#eb6b66" -sb "#eb6b66" -sf "#000000"

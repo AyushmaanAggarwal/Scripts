@@ -1,0 +1,8 @@
+#!/bin/sh
+
+rclone sync -vPL --transfers 10 --tpslimit 10 /home/ayushmaan/Documents    EncryptDropbox:LgGramAyu/weekly/Documents 
+rclone sync -vPL --transfers 10 --tpslimit 10 /home/ayushmaan/Scripts      EncryptDropbox:LgGramAyu/weekly/Scripts 
+rclone sync -vPL --transfers 10 --tpslimit 10 /etc                         EncryptDropbox:LgGramAyu/weekly/etc
+rclone sync -vPL --transfers 10 --tpslimit 10 /home/ayushmaan/.config      EncryptDropbox:LgGramAyu/weekly/config
+rclone sync -vPL --transfers 10 --tpslimit 10 /home/ayushmaan/Sync/Backups EncryptDropbox:LgGramAyu/weekly/Sync/Backups
+rclone sync -vPL --transfers 10 --tpslimit 10 /home/ayushmaan/Backups      EncryptDropbox:LgGramAyu/weekly/Backups

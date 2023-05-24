@@ -27,9 +27,10 @@ fi
 # This script updates all pacman packages(no flatpak or snap packages on computer)
 echo "Updating Packages: " 
 sudo pacman -Sy | tee /var/log/scripts/AutoUpdate 
-
 output+="Pacman Updated: $(pacman -Qu) \n"
-sudo pacman -Syu 
+sudo pacman -Syu # Update packages
+sudo paccache -rvk2 # Clear cache after 2 versions of packages
+sudo paccache -rvu # Clear cache of uninstalled packages
 #sudo snap refresh
 # reprint
 sudo flatpak update 
@@ -37,9 +38,19 @@ sudo npm update
 sudo mamba update conda 
 yay -Syuqaw --ignore miniconda3 --answerclean All --answerdiff None --answeredit None 
 
+echo "Need to figure out pycache for yay"
 #echo; figlet "spotify-tui"
 #cd /home/ayushmaan/Applications/spotify-tui
 #cargo install spotify-tui
+
+echo "Back up package lists"
+pacman -Q > /home/ayushmaan/Backups/pacman/package_all.backup
+conda env export -n base > /home/ayushmaan/Backups/conda_envs/base_environment.yml
+conda env export -n plain > /home/ayushmaan/Backups/conda_envs/plain_environment.yml
+conda env export -n ml > /home/ayushmaan/Backups/conda_envs/ml_environment.yml
+conda env export -n webdev > /home/ayushmaan/Backups/conda_envs/webdev_environment.yml
+conda env export -n sslresearch > /home/ayushmaan/Backups/conda_envs/sslresearch_environment.yml
+conda env export -n physics > /home/ayushmaan/Backups/conda_envs/physics_environment.yml
 
 echo; echo "dwm status"
 cd /home/ayushmaan/dwm

@@ -1,0 +1,3 @@
+#!/bin/sh
+
+rclone sync -vPL --transfers 10 EncryptDropbox:LgGramAyu/weekly EncryptDropbox:LgGramAyu/bimonthly
