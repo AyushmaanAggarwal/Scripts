@@ -1,72 +1,103 @@
 #!/bin/bash
-output=""
-reprint () {
-	 clear
-	 figlet Welcome Ayushmaan
-	 echo -e "$output"
-}
 
-reprint
 
+#     _         _        _   _           _       _
+#    / \  _   _| |_ ___ | | | |_ __   __| | __ _| |_ ___
+#   / _ \| | | | __/ _ \| | | | '_ \ / _` |/ _` | __/ _ \
+#  / ___ \ |_| | || (_) | |_| | |_) | (_| | (_| | ||  __/
+# /_/   \_\__,_|\__\___/ \___/| .__/ \__,_|\__,_|\__\___|
+#                             |_|
+#  ____            _
+# / ___| _   _ ___| |_ ___ _ __ ___
+# \___ \| | | / __| __/ _ \ '_ ` _ \
+#  ___) | |_| \__ \ ||  __/ | | | | |
+# |____/ \__, |___/\__\___|_| |_| |_|
+#        |___/
+#
+# By: Ayushmaan Aggarwal (2022)
+# ---------------------------------------- 
+figlet Welcome Ayushmaan
+
+# ---------------------------------------- 
+# Set up micromamba
+# ---------------------------------------- 
+export MAMBA_EXE='/home/ayushmaan/.local/bin/micromamba';
+export MAMBA_ROOT_PREFIX='/home/ayushmaan/micromamba';
+__mamba_setup="$("$MAMBA_EXE" shell hook --shell zsh --root-prefix "$MAMBA_ROOT_PREFIX" 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__mamba_setup"
+else
+    alias micromamba="$MAMBA_EXE"  # Fallback on help from mamba activate
+fi
+unset __mamba_setup
+
+# ---------------------------------------- 
 #Wait for Internet
+# ---------------------------------------- 
 echo "Waiting for wifi"
 until ping -c 1 archlinux.org | grep "ttl="; do sleep 1; done
 echo "Connected to Internet"; echo
 
-# Set Time
+# ---------------------------------------- 
+# Sync Network Clock
+# ---------------------------------------- 
 if [ $(timedatectl show | grep NTPSync) != $(echo -e NTPSynchronized=yes) ]
 then	
 	echo "Sync Time"
 	sudo timedatectl set-ntp true
-	output="Synced Time\n\n"
 	echo; echo; sleep 1
 fi
 
-# reprint
+# ---------------------------------------- 
+# Backup / files before update
+# ---------------------------------------- 
+echo; echo "[backup] Back up root directory"
+sudo btrfs subvolume delete /.snapshots/backup_before_updates/3_backup_ago/root
+sudo mv /.snapshots/backup_before_updates/2_backup_ago/root /.snapshots/backup_before_updates/3_backup_ago/root
+sudo mv /.snapshots/backup_before_updates/1_backup_ago/root /.snapshots/backup_before_updates/2_backup_ago/root
+sudo btrfs subvolume snapshot / /.snapshots/backup_before_updates/1_backup_ago/root
 
-# This script updates all pacman packages(no flatpak or snap packages on computer)
+# ---------------------------------------- 
+# Begin updating packages
+# ---------------------------------------- 
 echo "Updating Packages: " 
-sudo pacman -Sy | tee /var/log/scripts/AutoUpdate 
-output+="Pacman Updated: $(pacman -Qu) \n"
-sudo pacman -Syu # Update packages
+sudo pacman -Syu # Update Arch packages
+#sudo snap refresh
+echo; echo "[flatpak] Update Flatpak Packages"
+sudo flatpak update 
+echo; echo "[npm] Update NodeJS Packages"
+sudo npm update 
+echo; echo "[tlmgr] Update LaTeX Packages"
+sudo /usr/local/texlive/2023/bin/x86_64-linux/tlmgr update --all
+echo; echo "[conda] Update Anaconda Packages"
+micromamba self-update
+echo; echo "[yay] Update AUR Packages"
+yay -Syua --ignore miniconda3 --answerclean All --answerdiff None
+
+# ---------------------------------------- 
+# Clearing unnecessary packges from cache
+# ---------------------------------------- 
+echo "Need to figure out pycache for yay"
+echo; echo "[pacman] Clearing pacman cache"
 sudo paccache -rvk2 # Clear cache after 2 versions of packages
 sudo paccache -rvu # Clear cache of uninstalled packages
-#sudo snap refresh
-# reprint
-sudo flatpak update 
-sudo npm update 
-sudo mamba update conda 
-yay -Syuqaw --ignore miniconda3 --answerclean All --answerdiff None --answeredit None 
 
-echo "Need to figure out pycache for yay"
-#echo; figlet "spotify-tui"
-#cd /home/ayushmaan/Applications/spotify-tui
-#cargo install spotify-tui
+echo; echo "[yay] Clearing yay cache"
+yay -Sc --aur
 
-echo "Back up package lists"
+
+# ---------------------------------------- 
+# Creating a backup list of all packages
+# ---------------------------------------- 
+echo; echo "[backup] Back up package lists"
 pacman -Q > /home/ayushmaan/Backups/pacman/package_all.backup
-conda env export -n base > /home/ayushmaan/Backups/conda_envs/base_environment.yml
-conda env export -n plain > /home/ayushmaan/Backups/conda_envs/plain_environment.yml
-conda env export -n ml > /home/ayushmaan/Backups/conda_envs/ml_environment.yml
-conda env export -n webdev > /home/ayushmaan/Backups/conda_envs/webdev_environment.yml
-conda env export -n sslresearch > /home/ayushmaan/Backups/conda_envs/sslresearch_environment.yml
-conda env export -n physics > /home/ayushmaan/Backups/conda_envs/physics_environment.yml
-
-echo; echo "dwm status"
-cd /home/ayushmaan/dwm
-git status -sb
-
-echo; echo "st status"
-cd /home/ayushmaan/st
-git status -sb
-
-echo; echo "dmenu status"
-cd /home/ayushmaan/dmenu
-git status -sb
-
-echo; echo "dwmstatus status"
-cd /home/ayushmaan/dwmstatus
-git status -sb
+pacman -Qqen > /home/ayushmaan/Backups/pacman/pkglist.txt
+pacman -Qqem > /home/ayushmaan/Backups/pacman/pkglist_aur.txt
+micromamba env export -n base 	 | sudo tee /home/ayushmaan/Backups/mamba_envs/base_environment.yml > /dev/null
+micromamba env export -n webdev	 | sudo tee /home/ayushmaan/Backups/mamba_envs/webdev_environment.yml > /dev/null
+micromamba env export -n eos 	 | sudo tee /home/ayushmaan/Backups/mamba_envs/eos_environment.yml > /dev/null
+micromamba env export -n physics | sudo tee /home/ayushmaan/Backups/mamba_envs/physics_environment.yml > /dev/null
+micromamba env export -n Quarto  | sudo tee /home/ayushmaan/Backups/mamba_envs/quarto_environment.yml > /dev/null
 
 figlet "Finished Startup"
 sleep 6

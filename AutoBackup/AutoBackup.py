@@ -1,9 +1,12 @@
+#!/usr/bin/python3
 import os
+import re
+import sys
 import datetime
 import subprocess
 import socket
-import sys
 
+print("Starting Script")
 # Verify that the process isn't already running
 def get_lock(process_name):
     # Without holding a reference to our socket somewhere it gets garbage
@@ -16,9 +19,9 @@ def get_lock(process_name):
         # on the file system itself.
         # Works only in Linux
         get_lock._lock_socket.bind('\0' + process_name)
-        print('I got the lock')
+        print('Sucessfuly Obtained Lock')
     except socket.error:
-        print('Lock exists')
+        print('Lock Exists')
         sys.exit()
 
 get_lock('running_dropbox_backup')
@@ -43,51 +46,26 @@ except FileNotFoundError:
 
 cwd = os.getcwd()
 
-# Weekly
-line = file.readline()
-weeklyDate = line
-assert "datetime.datetime" in line, "Must contain datetime object in datetime file"
-date = eval(file.readline())
-if datetime.datetime.now() > date + datetime.timedelta(7):
-    print("Weekly Backup Running")
-    subprocess.run([os.path.join(cwd, "AutoBackup.weekly")])
-    weeklyDate = datetime.datetime.now() 
+timeframe = ["weekly", "monthly", "bimonthly", "yearly"]
+timeframedays = [7, 30, 60, 365]
+lastUpdated = [None, None, None, None]
 
-# Monthly
-line = file.readline()
-monthlyDate = line
-assert "datetime.datetime" in line, "Must contain datetime object in datetime file"
-date = eval(file.readline())
-if datetime.datetime.now() > date + datetime.timedelta(30):
-    print("Monthly Backup Running")
-    subprocess.run([os.path.join(cwd, "AutoBackup.monthly")])
-    monthlyDate = datetime.datetime.now()
-
-# Monthly
-line = file.readline()
-bimonthlyDate = line
-assert "datetime.datetime" in line, "Must contain datetime object in datetime file"
-date = eval(file.readline())
-if datetime.datetime.now() > date + datetime.timedelta(60):
-    print("Bimonthly Backup Running")
-    subprocess.run([os.path.join(cwd, "AutoBackup.bimonthly")])
-    bimonthlyDate = datetime.datetime.now()
-
-# Yearly
-line = file.readline()
-yearlyDate = line
-assert "datetime.datetime" in line, "Must contain datetime object in datetime file"
-date = eval(file.readline())
-if datetime.datetime.now() > date + datetime.timedelta(365):
-    print("Yearly Backup Running")
-    subprocess.run([os.path.join(cwd, "AutoBackup.yearly")])
-    yearlyDate = datetime.datetime.now()
-
+for t in range(len(timeframe)):
+    tf = timeframe[t]
+    tfd = timeframedays[t]
+    line = file.readline()
+    lastUpdated[t] = line
+    assert "datetime.datetime" in line, "Must contain datetime object in lastBackup.txt file"
+    assert re.search("^datetime\.datetime\((\d+, ){6}\d+\)$", line), "Must contain datetime object in lastBackup.txt file"
+    date = eval(file.readline())
+    if datetime.datetime.now() > date + datetime.timedelta(tfd):
+        print(f"{tf} Backup Running")
+        subprocess.run([os.path.join(cwd, f"AutoBackup.{tf}")])
+        lastUpdated[t] = datetime.datetime.now() 
+    #raise RuntimeError
 file.close()
 
 print("Writing to backup")
 with open("lastBackup.txt", "w") as file:
-    file.writelines(repr(weeklyDate) + "\n")
-    file.writelines(repr(monthlyDate) + "\n")
-    file.writelines(repr(bimonthlyDate) + "\n")
-    file.writelines(repr(yearlyDate) + "\n")
+    for date in lastUpdated:
+        file.writelines(repr(date) + "\n")

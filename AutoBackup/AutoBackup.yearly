@@ -1,3 +1,3 @@
 #!/bin/sh
 
-rclone sync -vPL --transfers 10 EncryptDropbox:LgGramAyu/monthly EncryptDropbox:LgGramAyu/yearly
+rclone sync -PL --transfers 13 --tpslimit 13 --ignore-errors EncryptDropbox:LgGramAyu/monthly EncryptDropbox:LgGramAyu/yearly
