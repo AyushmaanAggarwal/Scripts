@@ -1,0 +1,12 @@
+#!/bin/bash
+
+SPACE=" "
+CHOICE=$(ls /home/ayushmaan/Documents/Piano\ Music/|  dmenu -p "Choose PDF to open")
+echo $CHOICE
+cd /home/ayushmaan/Documents/College/Textbooks/
+if [ $CHOICE == $SPACE ] || [ -z $CHOICE ]; then
+	echo "No Textbook Selected" | dmenu
+else
+	zathura "$CHOICE"
+fi
+

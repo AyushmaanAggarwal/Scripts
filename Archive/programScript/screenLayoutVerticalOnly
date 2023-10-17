@@ -1,0 +1,6 @@
+#!/bin/bash
+
+xrandr --output eDP-1 --off
+xrandr --output DP-3-1-8 --rotate left
+
+feh --bg-fill /home/ayushmaan/Pictures/oneRing.jpg

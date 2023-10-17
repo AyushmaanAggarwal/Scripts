@@ -1,0 +1,21 @@
+echo "Mounting Flashdrive"
+sudo mount /dev/sda1 /media/sandisk_usb
+
+echo "Need to add"
+diff --recursive /media/sandisk_usb/data /home/ayushmaan/Documents/College/2\ -\ Physics\ 5BL/Capstone\ Project/data
+
+echo "Copy Flashdrive"
+rm -rf /home/ayushmaan/Documents/College/2\ -\ Physics\ 5BL/Capstone\ Project/data
+cp -r /media/sandisk_usb/data /home/ayushmaan/Documents/College/2\ -\ Physics\ 5BL/Capstone\ Project/
+
+echo "Check if data is synced from flashdrive"
+diff --recursive /media/sandisk_usb/data /home/ayushmaan/Documents/College/2\ -\ Physics\ 5BL/Capstone\ Project/data
+
+echo "Unmount Flashdrive"
+sudo umount /media/sandisk_usb
+
+echo "Eject Flashdrive"
+sudo eject /dev/sda
+
+echo "Finished Syncing"
+sleep 60

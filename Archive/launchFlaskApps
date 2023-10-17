@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# need to write menu of flask apps and run them in the browser
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/opt/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/opt/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/opt/miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/opt/miniconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
+CHOICE=$(echo -e  "Latex Text Converter\n" | dmenu -p "Choose Flask App")
+echo "$CHOICE"
+case $CHOICE in
+	"Latex Text Converter")
+		# conda activate webdev
+		conda activate webdev
+		cd ~/Documents/Programming/Python/LatexConverter
+		python3 app.py };;
+	*)
+		exit 0;;
+esac
+
+echo "Done Running"

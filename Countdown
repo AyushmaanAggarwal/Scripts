@@ -1,0 +1,9 @@
+#!/bin/sh
+XMAS=$(date -d "Jun 1" +%-j)
+TODAY=$(date +%-j)
+DAY=$((XMAS - TODAY))
+if [ "$DAY" -ge 0 ]; then
+        echo There are $DAY days left until the AP Exams
+else
+        echo Good Luck on the Exam\!
+fi

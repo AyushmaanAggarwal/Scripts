@@ -1,0 +1,10 @@
+cd ~/Programming/AP Java(Eclipse)"; git add -A
+echo "Write Git Commit name for AP CS: "; read commitName
+git commit -m "$commitName"
+git push origin master
+git pull orign master
+cd "~/Programming/Andriod App Development/"; git add -A
+echo "Write Git Commit name for Android: "; read commitName
+git commit -m "$commitName"
+git push origin master
+git pull orign master

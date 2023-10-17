@@ -1,0 +1,33 @@
+#!/bin/bash
+
+NAME="Dune: Litany Against Fear\nLord Of The Rings: One Ring"
+CHOICE=$(echo -e  $NAME | dmenu -p "Choose Passage:")
+Quote=""
+case $CHOICE in
+	""):
+		exit 0;;
+	"Dune: Litany Against Fear")
+		Quote="\n\n\t
+		I must not fear.\n\t
+		Fear is the mind-killer.\n\t
+		Fear is the little-death that brings total obliteration.\n\t
+		I will face my fear.\n\t
+		I will permit it to pass over me and through me.\n\t
+		And when it has gone past, I will turn the inner eye to see its path.\n\t
+		Where the fear has gone there will be nothing. Only I will remain.\n\t"
+		;;
+	"Lord Of The Rings: One Ring")
+		Quote="\n\n\t
+		Three Rings for the Elven-kings under the sky,\n\t
+		Seven for the Dwarf-lords in their halls of stone,\n\t
+		Nine for Mortal Men doomed to die,\n\t
+		One for the Dark Lord on his dark throne\n\t
+		In the Land of Mordor where the Shadows lie.\n\t\v
+		One Ring to rule them all, One Ring to find them,\n\t
+		One Ring to bring them all and in the darkness bind them\n\t
+		In the Land of Mordor where the Shadows lie.\n";;
+	*)
+		exit 0;;
+esac
+st -t scratchpad ./Scripts/test "$Quote"
+echo "DONE"

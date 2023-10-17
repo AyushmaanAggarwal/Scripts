@@ -1,0 +1,4 @@
+xinput map-to-output "Wacom HID 5282 Pen stylus" eDP-1 & \
+xinput map-to-output "Wacom HID 5282 Finger touch" eDP-1 & \
+xinput map-to-output "Wacom HID 5282 Pen eraser" eDP-1 & \
+feh --bg-fill Pictures/oneRing.jpg 

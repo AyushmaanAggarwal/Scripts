@@ -1,0 +1,21 @@
+#!/bin/sh
+
+
+STRING=$(xrandr --query --verbose | grep eDP1 | sed -n "/normal .normal/p")
+echo $STRING
+
+if [ -z $STRING ];
+then
+	echo "Rotating Screen to Normal Position"
+	xrandr --output eDP1 --primary --mode 2560x1600 --rotate normal
+	xinput set-prop 12 324 0
+	xinput set-prop 11 324 0
+	xinput set-prop 19 324 0
+else
+	echo "Rotating Screen to the right"
+	xrandr --output eDP1 --primary --mode 2560x1600 --rotate right
+	xinput set-prop 12 324 1
+	xinput set-prop 11 324 1
+	xinput set-prop 19 324 1
+fi
+

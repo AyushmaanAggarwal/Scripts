@@ -1,0 +1,165 @@
+#!/bin/bash
+function power {
+	curr="$(cat /sys/class/power_supply/BAT1/current_now)"
+	volt="$(cat /sys/class/power_supply/BAT1/voltage_now)"
+	watt="$(("$curr"*"$volt"/ 1000000000000))"
+	echo "$watt"
+}
+HEIGHT=30
+WIDTH=40
+CHOICE_HEIGHT=12
+BACKTITLE="Made by Ayushmaan"
+TITLE="Command GUI"
+TITLE2="Programs GUI"
+TITLE3="Hardware GUI"
+TITLE4="Classes GUI"
+MENU="Choose one of the following options:"
+
+OPTIONS=(1 "Notion"
+	 2 "Open Supplemental Essays: MIT"
+  	 3 "Run Programs"
+	 4 "Clock"
+	 5 "Cava"
+	 6 "Hardware"
+	 7 "Star Wars IV"
+	 8 "Classes")
+PROGRAMS=(1 "Run Eclipse"
+     2 "Run Scrcpy"
+	 3 "Run DroidCam"
+	 4 "Update all applications"
+	 5 "Git update"
+	 6 "Run Latest Java Program")
+HARDWARE=(1 "Unmount Backup Drive"
+	 2 "CPU Temps"
+	 3 "GPU Temps"
+	 4 "Power"
+	 5 "Clear Cache")
+CLASSES=(1 "HS Classes"
+	 2 "AP CS"
+	 3 "AP Macroeconomics"
+	 4 "AP Physics"
+	 5 "GYM"
+	 6 "Science Research"
+	 7 "AP Calculus BC"
+	 8 "AP Psychology"
+	 9 "AP Literature")
+CHOICE=$(dialog --clear --backtitle "$BACKTITLE"  --title "$TITLE" --menu "$MENU" $HEIGHT $WIDTH $CHOICE_HEIGHT  "${OPTIONS[@]}" 2>&1 >/dev/tty)
+
+clear
+case "$CHOICE" in
+	1)
+	xdotool key super+shift+a
+	google-chrome "https://www.notion.so/ayushmaan/Home-a0cffa5c4d324c38a68767cccef1c67f" ;;
+	2)
+	xdotool key super+shift+a
+	google-chrome "https://www.cornell.edu/" \
+	"https://docs.google.com/document/d/1igSLTqlHXPz0BVBQ8Yu7DU55K5j24In2uNfcPEBCjLM/edit#heading=h.nhn3kwclse52" \
+	"https://www.commonapp.org/" \
+	"https://www.coalitionforcollegeaccess.org/" \
+	"https://docs.google.com/document/d/1oYm3Qdwyk8K_UxEWUzV8ge0gAyFV3CqfMAg8HxDOOTg/edit" ;;
+	3)
+	CHOICE2=$(dialog --clear --backtitle "$BACKTITLE"  --title "$TITLE2" --menu "$MENU" $HEIGHT $WIDTH $CHOICE_HEIGHT  "${PROGRAMS[@]}" 2>&1 >/dev/tty)
+	clear
+	case "$CHOICE2" in
+		1) #Eclipse
+		xdotool key super+shift+a; cd /home/ayushmaan/Applications/eclipse; ./eclipse ;;
+		2) #Scrcpy
+		xdotool key super+shift+a; scrcpy ;;
+		3) #DroidCam
+		xdotool key super+shift+a; droidcam ;;
+		4) #Update all applications
+		sudo apt update
+		sudo apt upgrade
+		snap refresh
+		flatpak update
+		echo "All updates completed! You can exit now.";;
+		5) #Github Update
+		cd ~/Programming/Bash\ Scripts/
+		ls
+		./GithubUpdate.sh;;
+		6) #Latest Java Program
+		cd ~/Programming/Bash\ Scripts/
+		./LatestJavaProgramRunner.sh;;
+	esac;;
+	4)
+	tty-clock -c -s -t;;
+	5)
+	cava;;
+	6)
+	CHOICE3=$(dialog --clear --backtitle "$BACKTITLE"  --title "$TITLE3" --menu "$MENU" $HEIGHT $WIDTH $CHOICE_HEIGHT  "${HARDWARE[@]}" 2>&1 >/dev/tty)
+	case "$CHOICE3" in
+		1) #Backup Drive
+		sudo umount /media/ayushmaan/Backup\ Drive;;
+		2) #CPU
+		watch sensors coretemp-isa-0000;;
+		3) #GPU
+		watch nvidia-smi;;
+		4) #Power
+		export -f power
+		watch -x bash -c power ;;
+		5) #Cache
+		sudo -i; sync; echo 1 > /proc/sys/vm/drop_caches; exit; top;;
+
+	esac;;
+	7) 
+	telnet towel.blinkenlights.nl;;
+	8)
+	CHOICE4=$(dialog --clear --backtitle "$BACKTITLE"  --title "$TITLE4" --menu "$MENU" $HEIGHT $WIDTH $CHOICE_HEIGHT  "${CLASSES[@]}" 2>&1 >/dev/tty)
+	case "$CHOICE4" in
+		1)
+		./Programming/Bash\ Scripts/HSClassRunner.sh; exit;;
+		2)
+		#xdotool key super+shift+a # Finished AP Java
+		google-chrome "https://www.notion.so/ayushmaan/AP-Computer-Science-A-af6d67becad4429b82e53bbadb4a7409" \
+		"https://classroom.google.com/u/1/c/MTU4MDk1NDY5NDI2" \
+		"https://meet.google.com/lookup/fyjaycpj3v?authuser=2&hs=179";;
+		3)
+		xdotool key super+shift+a # Finished Macro Economics
+		google-chrome "https://www.notion.so/ayushmaan/AP-Macro-Economics-4dd0907d1d464e69837d0468165a8c09" \
+		"https://classroom.google.com/u/1/c/MTU4NjQzOTA2MDQz" \
+		"https://meet.google.com/lookup/bkofhkxeuq?authuser=2&hs=179";;
+		4)
+		xdotool key super+shift+a # Finished AP Physics 2
+		google-chrome "https://www.notion.so/ayushmaan/AP-Physics-2-5e7f4265e582406eb3014e5a070a6110" \
+		"https://classroom.google.com/u/1/c/MTU4NzQzNjU0NTcz" \
+		"https://meet.google.com/lookup/ezlgkij444?authuser=2&hs=179";;
+		5)
+		xdotool key super+shift+a # Finished SR
+		google-chrome "https://www.notion.so/ayushmaan/Home-a0cffa5c4d324c38a68767cccef1c67f" \
+		"https://classroom.google.com/u/1/c/MTUzMzkzMzQ3NzQ0" \
+		"https://classroom.google.com/u/1/c/MTUzNTAwMTY2OTQ5" \
+		"https://docs.google.com/document/d/1pEkkKh-tTnJqdp3s24UDr8TlD8EllVSc5XSybnU9JV4/edit" \
+		"https://meet.google.com/lookup/bezlldq7ft?authuser=2&hs=179";;
+		6)
+		xdotool key super+shift+a #Finished Gym
+		google-chrome  "https://classroom.google.com/u/1/c/MTU4MTEzMDc5NDkw" \
+		"https://meet.google.com/lookup/a7n7fgry76?authuser=2&hs=179";;
+		7)
+		xdotool key super+shift+a # Finished Calc BC
+		google-chrome "https://www.notion.so/ayushmaan/AP-Calculus-BC-f9584e0b77bb4c2d8a29ffac2e4382c0" \
+		"https://classroom.google.com/u/1/c/MTUzNDY5NTA3NzUw" \
+		"https://meet.google.com/lookup/aa2nz5rvym?authuser=2&hs=179";;
+		8)
+		xdotool key super+shift+a #  Finished Psychology
+		google-chrome "https://www.notion.so/ayushmaan/AP-Psychology-a964e8891e0c447494ea321d04ce615b" \
+		"https://classroom.google.com/u/1/c/MTU4NTc0NDQ3OTc1" \
+		"https://meet.google.com/lookup/diaaarqxai?authuser=2&hs=179";;
+		9)
+		xdotool key super+shift+a #  Finished AP Lit
+		google-chrome "https://www.notion.so/ayushmaan/AP-English-12-Lit-f8214f17f3564c629a0389712e1d151f" \
+		"https://classroom.google.com/u/1/c/MTUzNDU3NTU2MDk0" \
+		"https://meet.google.com/lookup/hlvcisgrse?authuser=2&hs=179";;
+	esac;;
+	p)
+	export -f power
+	watch -x bash -c power ;;
+	push)
+	cd "/home/ayushmaan/Programming/AP Java(Eclipse)"; git add -A
+	echo "Write Git Commit name: "; read commitName
+	git commit -m "$commitName"; git push origin master	;;
+	pull)
+	cd "~/Programming/AP Java(Eclipse)"; git pull origin master;;
+	*)
+	echo "Not Valid Choice"
+	;;
+esac

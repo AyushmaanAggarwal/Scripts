@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# EOS Experiment Workspace
+(flatpak run com.slack.Slack) & disown
+(flatpak run com.spotify.Client) & disown 
+(thunderbird) & disown
+
+kill -9 $PID

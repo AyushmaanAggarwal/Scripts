@@ -1,0 +1,11 @@
+#!/bin/bash
+
+SPACE=" "
+CHOICE=$(ls --sort=time /home/ayushmaan/Documents/College/Textbooks/| ./Scripts/dmenu_colorized -l 10 -p "Choose Textbook: ")
+echo $CHOICE
+if [ $CHOICE == $SPACE ] || [ -z $CHOICE ]; then
+	echo "No Textbook Selected"
+else
+	cd /home/ayushmaan/Documents/College/Textbooks/
+	zathura "$CHOICE"
+fi

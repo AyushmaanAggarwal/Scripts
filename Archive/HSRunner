@@ -1,0 +1,85 @@
+#!/bin/bash
+xdotool key super+shift+a
+timeConvert() {
+	timeUTC=$(date +%s)
+	timeCurrentSec=$((timeUTC%86400-18000+3600))
+	timeHour=$1
+	timeMinute=$2
+	timeHour=$((timeHour * 3600))
+	timeMinute=$((timeMinute * 60))
+
+	timeGoal=$((timeHour + timeMinute))
+    timeDistance=$((timeGoal - timeCurrentSec))
+	echo $timeCurrentSec
+	echo $timeGoal
+	echo $timeDistance
+	sleep $timeDistance
+}
+set -e
+account=2
+echo "Running High School Class Selector"
+
+
+if [ $(date +%k%M) -ge 700 -a $(date +%k%M) -le 804 ]; then 
+	# Finished AP Java
+	google-chrome \
+	"https://classroom.google.com/u/${account}/c/MTU4MDk1NDY5NDI2" \
+	"https://meet.google.com/lookup/fyjaycpj3v?authuser=${account}&hs=179"
+	timeConvert 8 05
+fi
+tempTime=`date +%k%M`
+if [ $(date +%k%M) -ge 805 -a $(date +%k%M) -le 852 ]; then 
+	# Finished Macro Economics
+	google-chrome \
+	"https://classroom.google.com/u/${account}/c/MTU4NjQzOTA2MDQz" \
+	"https://meet.google.com/lookup/bkofhkxeuq?authuser=${account}&hs=179"
+	timeConvert 8 53
+fi
+tempTime=`date +%k%M`
+if [ $(date +%k%M) -ge 853 -a $(date +%k%M) -le 940 ]; then 
+	# Finished AP Physics 2
+	google-chrome \
+	"https://classroom.google.com/u/${account}/c/MTU4NzQzNjU0NTcz" \
+	"https://meet.google.com/lookup/canbom4sge?authuser=${account}&hs=179"
+	timeConvert 9 41
+fi
+tempTime=`date +%k%M`
+if [ $(date +%k%M) -ge 941 -a $(date +%k%M) -le 1028 ]; then 
+	#Finished Gym
+	google-chrome \
+	"https://classroom.google.com/u/${account}/c/MTU4MTEzMDc5NDkw" \
+	"https://meet.google.com/lookup/a7n7fgry76?authuser=${account}&hs=179"
+	timeConvert 10 29
+fi
+tempTime=`date +%k%M`
+if [ $(date +%k%M) -ge 1029 -a $(date +%k%M) -le 1116 ]; then 
+	# Finished SR
+	google-chrome \
+	"https://classroom.google.com/u/${account}/c/MTUzNTAwMTY2OTQ5" \
+	"https://meet.google.com/lookup/bezlldq7ft?authuser=${account}&hs=179"
+	timeConvert 11 17
+fi
+tempTime=`date +%k%M`
+if [ $(date +%k%M) -ge 1117 -a $(date +%k%M) -le 1204 ]; then 
+	# Finished Calc BC
+	google-chrome \
+	"https://classroom.google.com/u/${account}/c/MTUzNDY5NTA3NzUw" \
+	"https://meet.google.com/lookup/aa2nz5rvym?authuser=${account}&hs=179"
+	timeConvert 12 5
+fi
+tempTime=`date +%k%M`
+if [ $(date +%k%M) -ge 1205 -a $(date +%k%M) -le 1252 ]; then 
+	#  Finished Psychology
+	google-chrome \
+	"https://classroom.google.com/u/${account}/c/MTU4NTc0NDQ3OTc1" \
+	"https://meet.google.com/lookup/diaaarqxai?authuser=${account}&hs=179"
+	timeConvert 12 53
+fi
+tempTime=`date +%k%M`
+if [ $(date +%k%M) -ge 1253 -a $(date +%k%M) -le 1341 ]; then 
+	#  Finished AP Lit
+	google-chrome \
+	"https://classroom.google.com/u/${account}/c/MTUzNDU3NTU2MDk0" \
+	"https://meet.google.com/lookup/fu6m6bmhur"
+fi
+echo done
